@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>にゃんにち記録</title>
+<meta name="theme-color" content="#0b1330">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=Shippori+Mincho:wght@400;600;800&display=swap');
+
+  :root{
+    --bg:#0b1330;
+    --bg-deep:#070c22;
+    --card-bg:#161f47;
+    --ink:#eef0fb;
+    --ink-soft:#9aa3c9;
+    --gold:#d4af6a;
+    --gold-deep:#b58f45;
+    --line:#3a4a80;
+    --shadow:rgba(5,8,25,0.5);
+    --ok:#7ec9a0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{overflow-x:hidden;}
+  body{
+    background:
+      radial-gradient(ellipse at 15% 0%, rgba(212,175,106,0.08) 0%, transparent 45%),
+      radial-gradient(ellipse at 90% 100%, rgba(212,175,106,0.06) 0%, transparent 50%),
+      var(--bg);
+    background-attachment:fixed;
+    color:var(--ink);
+    font-family:'Zen Maru Gothic',sans-serif;
+    min-height:100vh;
+  }
+  .container{max-width:520px;margin:0 auto;padding:22px 16px 70px;}
+
+  header{text-align:center;padding:14px 0 20px;}
+  .paw{font-size:32px;display:block;margin-bottom:6px;}
+  h1{
+    font-family:'Shippori Mincho',serif;font-weight:800;
+    font-size:clamp(22px,6vw,28px);
+    color:var(--gold);
+    letter-spacing:0.08em;
+    margin-bottom:6px;
+    text-shadow:0 0 18px rgba(212,175,106,0.3);
+  }
+  .tagline{font-size:12px;color:var(--ink-soft);letter-spacing:0.1em;}
+
+  /* オンボーディング */
+  #onboarding .step{background:var(--card-bg);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 2px 10px var(--shadow);}
+  #onboarding label{display:block;font-size:12.5px;color:var(--gold);letter-spacing:0.06em;margin-bottom:8px;font-weight:700;}
+  #onboarding input[type=text]{
+    width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--line);border-radius:10px;
+    color:var(--ink);font-family:'Zen Maru Gothic',sans-serif;font-size:14.5px;
+    padding:12px;outline:none;transition:border-color 0.3s;
+  }
+  #onboarding input[type=text]:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,175,106,0.12);}
+  .hint{font-size:11.5px;color:var(--ink-soft);margin-top:8px;line-height:1.6;}
+
+  .habit-edit-list{display:flex;flex-direction:column;gap:8px;margin-top:10px;}
+  .habit-edit-row{display:flex;gap:8px;align-items:center;}
+  .habit-edit-row input{flex:1;}
+  .habit-del{
+    background:transparent;border:1px solid var(--line);color:var(--ink-soft);
+    border-radius:8px;width:36px;height:36px;flex-shrink:0;cursor:pointer;font-size:16px;
+  }
+  .habit-del:hover{border-color:#e07a7a;color:#e07a7a;}
+  .habit-add{
+    margin-top:4px;background:transparent;border:1px dashed var(--line);color:var(--ink-soft);
+    border-radius:10px;padding:10px;font-size:13px;cursor:pointer;font-family:inherit;
+  }
+  .habit-add:hover{border-color:var(--gold);color:var(--gold);}
+
+  .btn{width:100%;padding:14px;border-radius:12px;font-family:'Zen Maru Gothic',sans-serif;font-size:14.5px;font-weight:700;cursor:pointer;letter-spacing:0.06em;transition:all 0.3s;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px;border:none;}
+  .btn-primary{background:linear-gradient(135deg,#d4af6a,#b58f45);color:var(--bg-deep);font-size:15px;box-shadow:0 3px 12px rgba(181,143,69,0.35);}
+  .btn-primary:hover:not(:disabled){box-shadow:0 5px 20px rgba(181,143,69,0.45);transform:translateY(-2px);}
+  .btn:disabled{opacity:0.4;cursor:not-allowed;transform:none !important;}
+  .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--ink-soft);}
+  .btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+
+  /* メイン画面 */
+  #main{display:none;}
+  #main.active{display:block;}
+
+  .today-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding:0 2px;}
+  .today-date{font-size:13px;color:var(--ink-soft);letter-spacing:0.04em;}
+  .streak{
+    display:flex;align-items:center;gap:5px;font-size:12.5px;color:var(--gold);font-weight:700;
+    background:rgba(212,175,106,0.1);padding:5px 12px;border-radius:20px;
+  }
+
+  .card{background:var(--card-bg);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 2px 10px var(--shadow);}
+  .card-label{font-size:12px;color:var(--gold);letter-spacing:0.08em;margin-bottom:12px;font-weight:700;display:flex;align-items:center;gap:6px;}
+
+  .habit-list{display:flex;flex-direction:column;gap:10px;}
+  .habit-item{
+    display:flex;align-items:center;gap:12px;padding:12px 14px;
+    background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:12px;
+    cursor:pointer;transition:all 0.2s;
+  }
+  .habit-item.checked{background:rgba(126,201,160,0.1);border-color:var(--ok);}
+  .habit-check{
+    width:22px;height:22px;border-radius:7px;border:2px solid var(--line);flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-size:13px;transition:all 0.2s;
+  }
+  .habit-item.checked .habit-check{background:var(--ok);border-color:var(--ok);color:var(--bg-deep);}
+  .habit-name{font-size:14px;}
+  .habit-item.checked .habit-name{color:var(--ok);}
+
+  textarea{
+    width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--line);border-radius:10px;
+    color:var(--ink);font-family:'Zen Maru Gothic',sans-serif;font-size:14px;
+    padding:12px;outline:none;transition:border-color 0.3s;resize:none;height:80px;
+  }
+  textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,175,106,0.12);}
+  textarea::placeholder{color:#6b7399;}
+
+  .comment-card{
+    background:var(--card-bg);border:1px solid var(--gold-deep);border-radius:16px;
+    padding:20px;margin-bottom:16px;box-shadow:0 4px 20px var(--shadow);display:none;
+  }
+  .comment-card.show{display:block;}
+  .comment-header{display:flex;align-items:center;gap:8px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px dashed var(--line);}
+  .comment-header span{font-size:20px;}
+  .comment-header h3{font-family:'Shippori Mincho',serif;font-size:15px;color:var(--gold);letter-spacing:0.06em;}
+  .comment-text{font-size:14px;line-height:1.9;color:var(--ink);}
+  .loading{text-align:center;padding:20px 10px;color:var(--ink-soft);font-size:13px;}
+  .loading-mark{font-size:22px;display:block;margin-bottom:8px;animation:twinkle 1.4s ease-in-out infinite;}
+  @keyframes twinkle{0%,100%{opacity:0.4;transform:scale(0.92);}50%{opacity:1;transform:scale(1.05);}}
+  .error-msg{background:rgba(212,110,90,0.1);border:1px solid rgba(212,110,90,0.4);border-radius:10px;padding:11px 14px;color:#e7a89a;font-size:12.5px;margin-top:8px;display:none;}
+  .error-msg.show{display:block;}
+
+  .history{display:flex;flex-direction:column;gap:8px;}
+  .history-item{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:10px 12px;background:rgba(255,255,255,0.03);border-radius:10px;font-size:12.5px;
+  }
+  .history-date{color:var(--ink-soft);}
+  .history-stat{color:var(--gold);font-weight:700;}
+  .empty{text-align:center;color:var(--ink-soft);font-size:12.5px;padding:14px 0;}
+
+  footer{text-align:center;margin-top:20px;font-size:10.5px;color:var(--ink-soft);letter-spacing:0.08em;opacity:0.6;}
+
+  .settings-link{
+    display:block;text-align:center;font-size:11.5px;color:var(--ink-soft);
+    margin-top:4px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;
+  }
+  .settings-link:hover{color:var(--gold);}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <span class="paw">🐾</span>
+    <h1>にゃんにち記録</h1>
+    <p class="tagline">今日のあなたを、猫がそっと見守っています</p>
+  </header>
+
+  <!-- オンボーディング -->
+  <div id="onboarding">
+    <div class="step">
+      <label>あなたの記録コード</label>
+      <input type="text" id="codeInput" placeholder="例：maechin2026（自分だけの合言葉）">
+      <p class="hint">好きな文字列を決めてください。次回からこのコードで同じ記録に続けてアクセスできます。他の端末でも同じコードを入力すれば、同じ記録が見られます。</p>
+    </div>
+    <div class="step" id="habitSetupStep" style="display:none;">
+      <label>記録したい習慣（3〜5個くらいがおすすめ）</label>
+      <div class="habit-edit-list" id="habitEditList"></div>
+      <button class="habit-add" id="addHabitBtn">+ 習慣を追加</button>
+    </div>
+    <button class="btn btn-primary" id="startBtn">はじめる</button>
+    <div class="error-msg" id="onboardError"></div>
+  </div>
+
+  <!-- メイン画面 -->
+  <div id="main">
+    <div class="today-bar">
+      <span class="today-date" id="todayDate"></span>
+      <span class="streak">🔥 <span id="streakCount">0</span>日連続</span>
+    </div>
+
+    <div class="card">
+      <div class="card-label">今日の習慣</div>
+      <div class="habit-list" id="habitList"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">今日のひとこと日記</div>
+      <textarea id="diaryInput" placeholder="今日あったこと、感じたことを一言（省略可）"></textarea>
+    </div>
+
+    <button class="btn btn-primary" id="recordBtn">🐾 今日を記録する</button>
+    <div class="error-msg" id="recordError"></div>
+
+    <div class="comment-card" id="commentCard">
+      <div class="comment-header"><span>🐾</span><h3>猫のひとこと</h3></div>
+      <div class="comment-text" id="commentText"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">これまでの記録</div>
+      <div class="history" id="historyList"><div class="empty">まだ記録がありません</div></div>
+    </div>
+
+    <span class="settings-link" id="settingsLink">習慣リストを編集する</span>
+  </div>
+
+  <footer>にゃんにち記録</footer>
+</div>
+
+<script>
+const STORAGE_KEY = 'nyannichi_code';
+let state = { code: '', habits: [], records: {} };
+let editingHabits = [];
+
+function todayStr(){
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+function todayLabel(){
+  const d = new Date();
+  const days = ['日','月','火','水','木','金','土'];
+  return `${d.getMonth()+1}月${d.getDate()}日（${days[d.getDay()]}）`;
+}
+
+// ===== 初期化 =====
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved){
+    document.getElementById('codeInput').value = saved;
+    loadAndEnter(saved);
+  }
+  document.getElementById('codeInput').addEventListener('input', onCodeInput);
+  document.getElementById('startBtn').addEventListener('click', onStart);
+  document.getElementById('addHabitBtn').addEventListener('click', () => addHabitRow(''));
+  document.getElementById('recordBtn').addEventListener('click', onRecord);
+  document.getElementById('settingsLink').addEventListener('click', showHabitEditorFromMain);
+});
+
+let habitSetupShown = false;
+function onCodeInput(){
+  const val = document.getElementById('codeInput').value.trim();
+  if (val.length >= 2 && !habitSetupShown){
+    habitSetupShown = true;
+    document.getElementById('habitSetupStep').style.display = 'block';
+    if (editingHabits.length === 0){
+      ['水を飲む','早起き','ストレッチ'].forEach(addHabitRow);
+    }
+  }
+}
+
+function addHabitRow(value){
+  const list = document.getElementById('habitEditList');
+  const row = document.createElement('div');
+  row.className = 'habit-edit-row';
+  row.innerHTML = `<input type="text" value="${escapeHtml(value)}" placeholder="習慣の名前">
+    <button class="habit-del" type="button">×</button>`;
+  row.querySelector('.habit-del').addEventListener('click', () => row.remove());
+  list.appendChild(row);
+}
+
+function escapeHtml(s){
+  return (s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+async function onStart(){
+  const code = document.getElementById('codeInput').value.trim();
+  const errEl = document.getElementById('onboardError');
+  errEl.classList.remove('show');
+  if (!code || code.length < 2){
+    errEl.textContent = 'コードは2文字以上で入力してください。';
+    errEl.classList.add('show');
+    return;
+  }
+  const habitInputs = [...document.querySelectorAll('#habitEditList input')];
+  const habits = habitInputs.map(i => i.value.trim()).filter(Boolean);
+  if (habits.length === 0){
+    errEl.textContent = '習慣を1つ以上入力してください。';
+    errEl.classList.add('show');
+    return;
+  }
+
+  document.getElementById('startBtn').disabled = true;
+  try{
+    // 既存データがあるか確認
+    const existing = await fetchRecords(code);
+    if (existing && existing.habits && existing.habits.length){
+      state = { code, habits: existing.habits, records: existing.records || {} };
+    } else {
+      state = { code, habits, records: {} };
+      await saveRecords();
+    }
+    localStorage.setItem(STORAGE_KEY, code);
+    enterMain();
+  } catch(err){
+    errEl.textContent = '通信エラーが発生しました：' + err.message;
+    errEl.classList.add('show');
+  }
+  document.getElementById('startBtn').disabled = false;
+}
+
+async function loadAndEnter(code){
+  try{
+    const data = await fetchRecords(code);
+    if (data && data.habits && data.habits.length){
+      state = { code, habits: data.habits, records: data.records || {} };
+      enterMain();
+    }
+  } catch(err){
+    // 読み込み失敗時はオンボーディングのまま
+    console.error(err);
+  }
+}
+
+function enterMain(){
+  document.getElementById('onboarding').style.display = 'none';
+  document.getElementById('main').classList.add('active');
+  document.getElementById('todayDate').textContent = todayLabel();
+  renderHabitList();
+  renderHistory();
+  renderStreak();
+  const t = todayStr();
+  const rec = state.records[t];
+  if (rec){
+    document.getElementById('diaryInput').value = rec.diary || '';
+    if (rec.catComment){
+      document.getElementById('commentText').textContent = rec.catComment;
+      document.getElementById('commentCard').classList.add('show');
+    }
+  }
+}
+
+function renderHabitList(){
+  const t = todayStr();
+  const rec = state.records[t] || { checks: {} };
+  const list = document.getElementById('habitList');
+  list.innerHTML = '';
+  state.habits.forEach(h => {
+    const checked = !!rec.checks[h];
+    const item = document.createElement('div');
+    item.className = 'habit-item' + (checked ? ' checked' : '');
+    item.innerHTML = `<div class="habit-check">${checked ? '✓' : ''}</div><div class="habit-name">${escapeHtml(h)}</div>`;
+    item.addEventListener('click', () => toggleHabit(h));
+    list.appendChild(item);
+  });
+}
+
+function toggleHabit(h){
+  const t = todayStr();
+  if (!state.records[t]) state.records[t] = { checks: {}, diary: '', catComment: '' };
+  state.records[t].checks[h] = !state.records[t].checks[h];
+  renderHabitList();
+}
+
+function calcStreak(){
+  let streak = 0;
+  let d = new Date();
+  while (true){
+    const key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    const rec = state.records[key];
+    const hasAny = rec && (Object.values(rec.checks || {}).some(Boolean) || (rec.diary && rec.diary.trim()));
+    if (hasAny){
+      streak++;
+      d.setDate(d.getDate() - 1);
+    } else {
+      break;
+    }
+  }
+  return streak;
+}
+
+function renderStreak(){
+  document.getElementById('streakCount').textContent = calcStreak();
+}
+
+function renderHistory(){
+  const el = document.getElementById('historyList');
+  const dates = Object.keys(state.records).sort().reverse().slice(0, 7);
+  if (dates.length === 0){
+    el.innerHTML = '<div class="empty">まだ記録がありません</div>';
+    return;
+  }
+  el.innerHTML = dates.map(d => {
+    const rec = state.records[d];
+    const doneCount = Object.values(rec.checks || {}).filter(Boolean).length;
+    const total = state.habits.length;
+    return `<div class="history-item"><span class="history-date">${d}</span><span class="history-stat">${doneCount}/${total} 達成</span></div>`;
+  }).join('');
+}
+
+async function onRecord(){
+  const t = todayStr();
+  if (!state.records[t]) state.records[t] = { checks: {}, diary: '', catComment: '' };
+  state.records[t].diary = document.getElementById('diaryInput').value.trim();
+
+  const btn = document.getElementById('recordBtn');
+  const errEl = document.getElementById('recordError');
+  const commentCard = document.getElementById('commentCard');
+  const commentText = document.getElementById('commentText');
+  errEl.classList.remove('show');
+  btn.disabled = true;
+  commentCard.classList.add('show');
+  commentText.innerHTML = `<div class="loading"><span class="loading-mark">🐾</span>猫が今日のあなたを見ています……</div>`;
+
+  try{
+    const checks = state.records[t].checks;
+    const doneList = state.habits.filter(h => checks[h]);
+    const notDoneList = state.habits.filter(h => !checks[h]);
+    const streak = calcStreak();
+
+    const comment = await fetchCatComment({
+      done: doneList,
+      notDone: notDoneList,
+      diary: state.records[t].diary,
+      streak
+    });
+    state.records[t].catComment = comment;
+    commentText.textContent = comment;
+    await saveRecords();
+    renderHistory();
+    renderStreak();
+  } catch(err){
+    commentCard.classList.remove('show');
+    errEl.textContent = 'エラーが発生しました：' + err.message;
+    errEl.classList.add('show');
+  }
+  btn.disabled = false;
+}
+
+function showHabitEditorFromMain(){
+  const newHabits = prompt('習慣をカンマ区切りで入力してください（例：水を飲む,早起き,運動）', state.habits.join(','));
+  if (newHabits === null) return;
+  const habits = newHabits.split(',').map(s => s.trim()).filter(Boolean);
+  if (habits.length === 0) return;
+  state.habits = habits;
+  renderHabitList();
+  renderHistory();
+  saveRecords();
+}
+
+// ===== API通信 =====
+async function fetchRecords(code){
+  const res = await fetch('/api/records?code=' + encodeURIComponent(code));
+  if (!res.ok) throw new Error('記録の取得に失敗しました');
+  const data = await res.json();
+  return data.exists ? data.data : null;
+}
+
+async function saveRecords(){
+  const res = await fetch('/api/records', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ code: state.code, data: { habits: state.habits, records: state.records } })
+  });
+  if (!res.ok) throw new Error('保存に失敗しました');
+}
+
+async function fetchCatComment({done, notDone, diary, streak}){
+  const res = await fetch('/api/comment', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ done, notDone, diary, streak })
+  });
+  const data = await res.json();
+  if (!res.ok || !data.comment) throw new Error(data.error || 'コメントの取得に失敗しました');
+  return data.comment;
+}
+</script>
+</body>
+</html>
