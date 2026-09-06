@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>にゃんにち記録</title>
-<meta name="theme-color" content="#0b1330">
+<meta name="theme-color" content="#F6F1E4">
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/icon-192.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -15,23 +15,23 @@
   @import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=Shippori+Mincho:wght@400;600;800&display=swap');
 
   :root{
-    --bg:#0b1330;
-    --bg-deep:#070c22;
-    --card-bg:#161f47;
-    --ink:#eef0fb;
-    --ink-soft:#9aa3c9;
-    --gold:#d4af6a;
-    --gold-deep:#b58f45;
-    --line:#3a4a80;
-    --shadow:rgba(5,8,25,0.5);
+    --bg:#F6F1E4;
+    --bg-deep:#EFE9D8;
+    --card-bg:#FFFFFF;
+    --ink:#3B3A32;
+    --ink-soft:#8A8A78;
+    --gold:#6B8560;
+    --gold-deep:#526846;
+    --line:#E3DFCC;
+    --shadow:rgba(90,80,50,0.10);
     --ok:#7ec9a0;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   html,body{overflow-x:hidden;}
   body{
     background:
-      radial-gradient(ellipse at 15% 0%, rgba(212,175,106,0.08) 0%, transparent 45%),
-      radial-gradient(ellipse at 90% 100%, rgba(212,175,106,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 15% 0%, rgba(107,133,96,0.08) 0%, transparent 45%),
+      radial-gradient(ellipse at 90% 100%, rgba(107,133,96,0.06) 0%, transparent 50%),
       var(--bg);
     background-attachment:fixed;
     color:var(--ink);
@@ -48,7 +48,7 @@
     color:var(--gold);
     letter-spacing:0.08em;
     margin-bottom:6px;
-    text-shadow:0 0 18px rgba(212,175,106,0.3);
+    text-shadow:0 0 18px rgba(107,133,96,0.25);
   }
   .tagline{font-size:12px;color:var(--ink-soft);letter-spacing:0.1em;}
 
@@ -60,7 +60,7 @@
     color:var(--ink);font-family:'Zen Maru Gothic',sans-serif;font-size:14.5px;
     padding:12px;outline:none;transition:border-color 0.3s;
   }
-  #onboarding input[type=text]:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,175,106,0.12);}
+  #onboarding input[type=text]:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(107,133,96,0.12);}
   .hint{font-size:11.5px;color:var(--ink-soft);margin-top:8px;line-height:1.6;}
 
   .habit-edit-list{display:flex;flex-direction:column;gap:8px;margin-top:10px;}
@@ -70,7 +70,7 @@
     background:transparent;border:1px solid var(--line);color:var(--ink-soft);
     border-radius:8px;width:36px;height:36px;flex-shrink:0;cursor:pointer;font-size:16px;
   }
-  .habit-del:hover{border-color:#e07a7a;color:#e07a7a;}
+  .habit-del:hover{border-color:#C2554F;color:#C2554F;}
   .habit-add{
     margin-top:4px;background:transparent;border:1px dashed var(--line);color:var(--ink-soft);
     border-radius:10px;padding:10px;font-size:13px;cursor:pointer;font-family:inherit;
@@ -78,8 +78,8 @@
   .habit-add:hover{border-color:var(--gold);color:var(--gold);}
 
   .btn{width:100%;padding:14px;border-radius:12px;font-family:'Zen Maru Gothic',sans-serif;font-size:14.5px;font-weight:700;cursor:pointer;letter-spacing:0.06em;transition:all 0.3s;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px;border:none;}
-  .btn-primary{background:linear-gradient(135deg,#d4af6a,#b58f45);color:var(--bg-deep);font-size:15px;box-shadow:0 3px 12px rgba(181,143,69,0.35);}
-  .btn-primary:hover:not(:disabled){box-shadow:0 5px 20px rgba(181,143,69,0.45);transform:translateY(-2px);}
+  .btn-primary{background:linear-gradient(135deg,#8AA47C,#6B8560);color:#FFFFFF;font-size:15px;box-shadow:0 3px 12px rgba(107,133,96,0.30);}
+  .btn-primary:hover:not(:disabled){box-shadow:0 5px 20px rgba(107,133,96,0.40);transform:translateY(-2px);}
   .btn:disabled{opacity:0.4;cursor:not-allowed;transform:none !important;}
   .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--ink-soft);}
   .btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
@@ -92,7 +92,7 @@
   .today-date{font-size:13px;color:var(--ink-soft);letter-spacing:0.04em;}
   .streak{
     display:flex;align-items:center;gap:5px;font-size:12.5px;color:var(--gold);font-weight:700;
-    background:rgba(212,175,106,0.1);padding:5px 12px;border-radius:20px;
+    background:rgba(107,133,96,0.10);padding:5px 12px;border-radius:20px;
   }
 
   .card{background:var(--card-bg);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 2px 10px var(--shadow);}
@@ -109,7 +109,7 @@
     width:22px;height:22px;border-radius:7px;border:2px solid var(--line);flex-shrink:0;
     display:flex;align-items:center;justify-content:center;font-size:13px;transition:all 0.2s;
   }
-  .habit-item.checked .habit-check{background:var(--ok);border-color:var(--ok);color:var(--bg-deep);}
+  .habit-item.checked .habit-check{background:var(--ok);border-color:var(--ok);color:#FFFFFF;}
   .habit-name{font-size:14px;}
   .habit-item.checked .habit-name{color:var(--ok);}
 
@@ -118,8 +118,8 @@
     color:var(--ink);font-family:'Zen Maru Gothic',sans-serif;font-size:14px;
     padding:12px;outline:none;transition:border-color 0.3s;resize:none;height:80px;
   }
-  textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,175,106,0.12);}
-  textarea::placeholder{color:#6b7399;}
+  textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(107,133,96,0.12);}
+  textarea::placeholder{color:#9C9C88;}
 
   .comment-card{
     background:var(--card-bg);border:1px solid var(--gold-deep);border-radius:16px;
@@ -133,7 +133,7 @@
   .loading{text-align:center;padding:20px 10px;color:var(--ink-soft);font-size:13px;}
   .loading-mark{font-size:22px;display:block;margin-bottom:8px;animation:twinkle 1.4s ease-in-out infinite;}
   @keyframes twinkle{0%,100%{opacity:0.4;transform:scale(0.92);}50%{opacity:1;transform:scale(1.05);}}
-  .error-msg{background:rgba(212,110,90,0.1);border:1px solid rgba(212,110,90,0.4);border-radius:10px;padding:11px 14px;color:#e7a89a;font-size:12.5px;margin-top:8px;display:none;}
+  .error-msg{background:rgba(194,85,79,0.1);border:1px solid rgba(194,85,79,0.4);border-radius:10px;padding:11px 14px;color:#B24A3E;font-size:12.5px;margin-top:8px;display:none;}
   .error-msg.show{display:block;}
 
   .history{display:flex;flex-direction:column;gap:8px;}
