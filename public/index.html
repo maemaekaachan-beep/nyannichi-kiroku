@@ -182,7 +182,7 @@
   <div id="main">
     <div class="today-bar">
       <span class="today-date" id="todayDate"></span>
-      <span class="streak">🔥 <span id="streakCount">0</span>日連続</span>
+     
     </div>
 
     <div class="card">
@@ -376,7 +376,8 @@ function calcStreak(){
 }
 
 function renderStreak(){
-  document.getElementById('streakCount').textContent = calcStreak();
+    const el = document.getElementById('streakCount');
+    if (el) el.textContent = calcStreak();
 }
 
 function renderHistory(){
