@@ -1,5 +1,5 @@
 // にゃんにち記録 - シンプルなservice worker(PWAインストール要件用)
-const CACHE_NAME = 'nyannichi-kiroku-v1';
+const CACHE_NAME = 'nyannichi-kiroku-v2';
 const APP_SHELL = ['/', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', (event) => {
@@ -23,18 +23,18 @@ self.addEventListener('fetch', (event) => {
   if (event.request.url.includes('/api/')) return;
   if (event.request.method !== 'GET') return;
 
+  // ネットワーク優先: まず最新を取りに行き、失敗したときだけキャッシュを使う
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      return (
-        cached ||
-        fetch(event.request)
-          .then((res) => {
-            const resClone = res.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, resClone));
-            return res;
-          })
-          .catch(() => cached)
-      );
-    })
+    fetch(event.request)
+      .then((res) => {
+        if (res.ok && new URL(event.request.url).origin === self.location.origin) {
+          const resClone = res.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, resClone));
+        }
+        return res;
+      })
+      .catch(() =>
+        caches.match(event.request).then((cached) => cached || caches.match('/'))
+      )
   );
 });
